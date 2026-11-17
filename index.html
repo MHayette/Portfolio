@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hayette Medessoukou · Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* Layout : accueil éditorial sur une colonne ; chaque projet ouvre une page dédiée à onglets (Aperçu, Résultats, Analyse, Code) */
+:root{
+  --bg:#ffffff;
+  --surface:#f5f8f6;
+  --ink:#15211c;
+  --muted:#5a6a63;
+  --line:#e1e8e4;
+  --accent:#0b7a5a;
+  --accent-soft:#e3f2ec;
+  --gold:#a87a22;
+  --warn:#b45309;
+  --bad:#b42318;
+  --display:"Playfair Display", Georgia, "Times New Roman", serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1714; --surface:#16211c; --ink:#e7eeeb; --muted:#9fb1a9; --line:#26352f;
+    --accent:#3cc795; --accent-soft:#173328; --gold:#e2b45e; --warn:#f59e0b; --bad:#f87171;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1714; --surface:#16211c; --ink:#e7eeeb; --muted:#9fb1a9; --line:#26352f;
+  --accent:#3cc795; --accent-soft:#173328; --gold:#e2b45e; --warn:#f59e0b; --bad:#f87171;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+a{color:var(--accent);text-underline-offset:3px}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0;font-weight:700}
+h4{margin:0 0 6px;font-size:17px}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+
+/* Nav */
+nav.top{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:700;font-size:19px;text-decoration:none;color:var(--ink)}
+nav.top ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+nav.top ul a{color:var(--ink);text-decoration:none;font-size:15px;font-weight:500}
+nav.top ul a:hover{color:var(--accent)}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1.6fr 1fr;gap:48px;align-items:center;padding:56px 0}
+.hero h1{font-size:clamp(38px,5.4vw,60px)}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.lead{font-size:19px;color:var(--muted);max-width:58ch;margin:18px 0 26px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:8px;font-weight:600;font-size:15px;text-decoration:none;border:1.5px solid var(--accent);cursor:pointer;background:transparent;color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--bg)}
+.facts{border:1px solid var(--line);border-radius:12px;padding:6px 22px;background:var(--surface)}
+.facts div{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15px}
+.facts div:last-child{border-bottom:0}
+.facts b{font-weight:600}
+
+section.block{padding:60px 0;border-top:1px solid var(--line)}
+.sec-head{margin-bottom:28px}
+.sec-head h2{font-size:clamp(28px,3.4vw,38px);margin-top:6px}
+.prose{max-width:66ch}
+.prose p{margin:0 0 14px}
+
+/* Compétences */
+.skills{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.skill{border:1px solid var(--line);border-radius:12px;padding:22px}
+.skill h3{font-size:20px;margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
+.chips li{font-size:14px;background:var(--accent-soft);padding:4px 12px;border-radius:999px}
+
+/* Cartes projets */
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.card{display:flex;flex-direction:column;gap:10px;text-align:left;border:1px solid var(--line);border-radius:12px;padding:24px;background:var(--bg);cursor:pointer;text-decoration:none;color:var(--ink);transition:border-color .15s, transform .15s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card .top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.card h3{font-size:23px}
+.card p{margin:0;color:var(--muted);font-size:16px}
+.card .more{margin-top:auto;padding-top:8px;color:var(--accent);font-weight:600;font-size:15px}
+.pill{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.pill.ok{color:var(--accent)}
+.pill.wip{color:var(--gold)}
+.pill.warn{color:var(--warn)}
+.pill.bad{color:var(--bad)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags span{font-size:13px;color:var(--muted);border:1px solid var(--line);padding:1px 9px;border-radius:6px}
+
+/* Parcours */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.tl .step{display:grid;grid-template-columns:110px 1fr;gap:20px;padding:16px 0;border-top:1px solid var(--line)}
+.tl .step:first-of-type{border-top:0}
+.tl .when{font-size:14px;color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums;padding-top:2px}
+.tl h4{font-family:var(--body);font-weight:600;margin:0}
+.tl p{margin:2px 0 0;color:var(--muted);font-size:15px}
+.sub{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+
+/* Contact */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.links{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.links li{display:flex;justify-content:space-between;gap:16px;padding:14px 18px;border:1px solid var(--line);border-radius:10px;flex-wrap:wrap}
+.links .k{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.todo{color:var(--gold);font-style:italic}
+footer{padding:28px 0 44px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+
+/* Pages projet */
+.view[hidden]{display:none}
+.back{display:inline-flex;gap:6px;align-items:center;margin:28px 0 18px;color:var(--accent);text-decoration:none;font-weight:600}
+.phead{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;flex-wrap:wrap;padding-bottom:22px}
+.phead h1{font-size:clamp(32px,4.4vw,48px);margin-top:6px}
+.phead p{margin:10px 0 0;color:var(--muted);max-width:62ch}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:12px 16px;font-weight:600;font-size:15px;color:var(--muted);cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.panel{padding:30px 0 60px}
+.panel[hidden]{display:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.box{border:1px solid var(--line);border-radius:12px;padding:22px;background:var(--bg)}
+.box.soft{background:var(--surface)}
+.box h3{font-size:20px;margin-bottom:10px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin-bottom:6px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--surface)}
+.kpi .l{font-size:13px;color:var(--muted)}
+.kpi .v{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2}
+.chartbox{position:relative;height:320px}
+.controls{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:var(--bg);padding:8px 14px;cursor:pointer;font-size:15px;font-weight:500}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--bg)}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--muted);font-weight:500}
+input[type="number"],select{font:inherit;font-size:15px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);min-width:0}
+input[type="range"]{accent-color:var(--accent);width:220px;max-width:100%}
+.out{font-size:18px}
+.out b{color:var(--accent);font-variant-numeric:tabular-nums}
+.tblwrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--muted);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+tfoot td{font-weight:700}
+.months{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.note{font-size:14px;color:var(--muted);margin-top:12px}
+.flag{border-left:3px solid var(--gold);background:var(--surface);padding:14px 18px;border-radius:0 8px 8px 0;margin:0 0 20px}
+.concl{counter-reset:c;list-style:none;padding:0;margin:0;display:grid;gap:14px}
+.concl li{counter-increment:c;display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start}
+.concl li::before{content:counter(c);font-family:var(--display);font-weight:700;font-size:22px;color:var(--accent);line-height:1.2}
+
+/* Code */
+.codehead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:22px 0 8px;flex-wrap:wrap}
+.codehead:first-child{margin-top:0}
+.codehead span{font-weight:600}
+pre{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.6}
+.copy{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:4px 12px;cursor:pointer;font-size:14px}
+
+/* Pipeline RESIL.IO */
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.pipe button{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:14px;text-align:left;cursor:pointer}
+.pipe button b{display:block;font-size:13px;color:var(--gold);letter-spacing:.06em}
+.pipe button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.placeholder{border:2px dashed var(--line);border-radius:12px;padding:30px;text-align:center;color:var(--muted)}
+
+/* CAPE */
+.cape{display:grid;grid-template-columns:120px 1fr 1fr;grid-template-rows:auto 1fr 1fr;gap:10px}
+.cape .ax{font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;justify-content:center;text-align:center}
+.cell{border:1px solid var(--line);border-radius:12px;padding:16px;text-align:left;background:var(--bg);cursor:pointer;min-height:120px;transition:background .15s,border-color .15s}
+.cell .L{font-family:var(--display);font-size:30px;font-weight:700;color:var(--accent);line-height:1}
+.cell .n{font-weight:600;margin-top:4px}
+.cell .w{font-size:14px;color:var(--muted)}
+.cell[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.cell.dom{background:var(--accent-soft)}
+.power td,.power th{text-align:center}
+.power td:first-child,.power th:first-child{text-align:left}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+
+/* Prototype mobile money */
+.proto{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:start}
+.phone{border:2px solid var(--ink);border-radius:28px;padding:18px 16px 20px;background:var(--surface);max-width:300px}
+.screen{background:#c8d8c0;color:#1d2a1a;font-family:var(--mono);font-size:14px;border-radius:8px;padding:12px;height:180px;white-space:pre-wrap;overflow:auto;border:1px solid #9fb197}
+.typed{font-family:var(--mono);margin:8px 0 12px;min-height:24px;padding:2px 8px;border-bottom:1px solid var(--line)}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.keys button{padding:10px 0;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-weight:600;cursor:pointer;font-family:var(--mono)}
+.keys button.ok{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.keys button.no{color:var(--bad)}
+
+@media (max-width:860px){
+  .hero,.two,.contact,.grid2,.proto{grid-template-columns:1fr}
+  .skills,.cards{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .pipe{grid-template-columns:repeat(2,1fr)}
+  .months{grid-template-columns:repeat(4,1fr)}
+}
+@media (max-width:480px){
+  body{font-size:16px}
+  .tl .step{grid-template-columns:1fr;gap:2px}
+  .months{grid-template-columns:repeat(3,1fr)}
+  .cape{grid-template-columns:70px 1fr 1fr}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="Navigation principale">
+  <div class="wrap">
+    <a class="brand" href="#accueil">Hayette Medessoukou</a>
+    <ul>
+      <li><a href="#accueil" data-scroll="a-propos">À propos</a></li>
+      <li><a href="#accueil" data-scroll="projets">Projets</a></li>
+      <li><a href="#accueil" data-scroll="parcours">Parcours</a></li>
+      <li><a href="#accueil" data-scroll="contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ================= ACCUEIL ================= -->
+<main id="v-accueil" class="view">
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Data &amp; développement</p>
+      <h1>Je transforme des données en <em>décisions</em> et en outils utiles.</h1>
+      <p class="lead">Étudiante en Master Information et communication (DASI) à l'Université de Toulon, diplômée en informatique et formée aux statistiques et au Big Data. Je cherche un stage ou une alternance en analyse de données.</p>
+      <div class="cta">
+        <a class="btn primary" href="#accueil" data-scroll="projets">Voir mes projets</a>
+        <a class="btn" href="#accueil" data-scroll="contact">Me contacter</a>
+      </div>
+    </div>
+    <div class="facts" aria-label="En bref">
+      <div><span class="muted">Basée à</span><b>La Seyne-sur-Mer (Var)</b></div>
+      <div><span class="muted">Formation</span><b>M1 DASI · Univ. Toulon</b></div>
+      <div><span class="muted">Outils</span><b>Excel, Power Query, R</b></div>
+      <div><span class="muted">Langues</span><b>Français · Anglais</b></div>
+      <div><span class="muted">Recherche</span><b>Stage / alternance data</b></div>
+    </div>
+  </header>
+
+  <section class="block" id="a-propos">
+    <div class="sec-head"><p class="eyebrow">À propos</p><h2>Un double profil : développeuse et analyste</h2></div>
+    <div class="prose">
+      <p>J'ai commencé par l'informatique, avec une Licence Systèmes Informatiques et Logiciels obtenue au Bénin. Je me suis ensuite spécialisée dans la donnée : Licence Pro Métiers du décisionnel et de la statistique à Aix-Marseille Université, puis Master Information et communication (DASI) à Toulon.</p>
+      <p>Ce parcours me permet d'aller de la question métier jusqu'à l'outil : cadrer un besoin, préparer et analyser les données, puis restituer les résultats dans un tableau de bord, un rapport ou une application.</p>
+      <p>Mes expériences en commerce et en restauration m'ont appris la rigueur, le travail en équipe et le sens du service.</p>
+    </div>
+  </section>
+
+  <section class="block" id="competences">
+    <div class="sec-head"><p class="eyebrow">Compétences</p><h2>Ce que je sais faire</h2></div>
+    <div class="skills">
+      <div class="skill"><h3>Analyse de données</h3>
+        <ul class="chips"><li>Statistiques descriptives</li><li>Régression linéaire</li><li>Corrélation</li><li>Prévisions</li><li>Pearson et Spearman</li><li>Indicateurs &amp; KPI</li></ul></div>
+      <div class="skill"><h3>Outils</h3>
+        <ul class="chips"><li>Excel</li><li>Power Query</li><li>R (dplyr, tidyr, ggplot2)</li><li>HTML</li><li>Tableaux de bord</li><li>Google Sheets</li></ul></div>
+      <div class="skill"><h3>Gestion de projet</h3>
+        <ul class="chips"><li>Note de cadrage</li><li>Rapports d'analyse</li><li>Présentation orale</li><li>Travail en équipe</li><li>Normes APA</li></ul></div>
+    </div>
+  </section>
+
+  <section class="block" id="projets">
+    <div class="sec-head"><p class="eyebrow">Projets</p><h2>Cliquez sur un projet pour voir les résultats, l'analyse et le code</h2></div>
+    <div class="cards">
+      <a class="card" href="#regression">
+        <div class="top"><span class="eyebrow">Statistiques</span><span class="pill ok">Interactif</span></div>
+        <h3>Régression linéaire et prévisions</h3>
+        <p>Relation publicité / ventes et prévision du chiffre d'affaires sur plusieurs années, avec répartition par trimestre.</p>
+        <div class="tags"><span>moindres carrés</span><span>corrélation</span><span>Excel</span></div>
+        <span class="more">Voir le projet →</span>
+      </a>
+      <a class="card" href="#micro">
+        <div class="top"><span class="eyebrow">Outil Excel</span><span class="pill ok">Simulateur</span></div>
+        <h3>Suivi micro-entreprise 2026</h3>
+        <p>Classeur pour suivre recettes, dépenses et cotisations URSSAF, avec alertes sur le plafond de chiffre d'affaires.</p>
+        <div class="tags"><span>tableau de bord</span><span>formules</span><span>alertes</span></div>
+        <span class="more">Voir le projet →</span>
+      </a>
+      <a class="card" href="#resilio">
+        <div class="top"><span class="eyebrow">Stage · Santé numérique</span><span class="pill ok">Interactif</span></div>
+        <h3>RESIL.IO Health</h3>
+        <p>675 prises de traitement et 2 244 scores de qualité de vie croisés pour 30 utilisatrices d'une application de santé.</p>
+        <div class="tags"><span>Power Query</span><span>R · ggplot2</span><span>Spearman</span></div>
+        <span class="more">Voir le projet →</span>
+      </a>
+      <a class="card" href="#a69">
+        <div class="top"><span class="eyebrow">Analyse d'acteurs</span><span class="pill ok">Interactif</span></div>
+        <h3>Le conflit de l'autoroute A69</h3>
+        <p>Cartographie des acteurs d'un conflit environnemental avec la matrice CAPE, et évolution des rapports de force.</p>
+        <div class="tags"><span>matrice CAPE</span><span>communication</span><span>projet de groupe</span></div>
+        <span class="more">Voir le projet →</span>
+      </a>
+      <a class="card" href="#momo">
+        <div class="top"><span class="eyebrow">Développement · SaaS</span><span class="pill wip">Prototype</span></div>
+        <h3>Traçabilité mobile money</h3>
+        <p>Retrouver en quelques secondes l'opération d'un client, même 10 jours après et même si le SMS a été supprimé.</p>
+        <div class="tags"><span>USSD</span><span>JavaScript</span><span>fintech</span></div>
+        <span class="more">Voir le projet →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="block" id="parcours">
+    <div class="sec-head"><p class="eyebrow">Parcours</p><h2>Formation et expérience</h2></div>
+    <div class="two">
+      <div class="tl">
+        <p class="sub">Formation</p>
+        <div class="step"><div class="when">2026 →</div><div><h4>Master Information et communication, DASI</h4><p>Université de Toulon</p></div></div>
+        <div class="step"><div class="when">2025 – 2026</div><div><h4>Licence Pro Métiers du décisionnel et de la statistique</h4><p>Statistiques et Big Data · Aix-Marseille Université</p></div></div>
+        <div class="step"><div class="when">2019</div><div><h4>Licence Systèmes Informatiques et Logiciels</h4><p>The West African Union University · Bénin</p></div></div>
+      </div>
+      <div class="tl">
+        <p class="sub">Expérience</p>
+        <div class="step"><div class="when">2025 – 2026</div><div><h4>Stagiaire analyse de données · RESIL.IO Health</h4><p>Préparation des données, analyses statistiques, rapport</p></div></div>
+        <div class="step"><div class="when">2026</div><div><h4>Équipière polyvalente · Quick</h4><p>Encaissement, ouverture et fermeture</p></div></div>
+        <div class="step"><div class="when">2026</div><div><h4>Employée d'étage · Hôtel LIFE Marseille</h4><p>Juillet – août</p></div></div>
+        <div class="step"><div class="when">2024 – 2025</div><div><h4>Caissière · Franprix, Bénin</h4><p>Service client et caisse</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="contact">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h2 style="font-size:clamp(28px,3.6vw,40px);margin-top:6px">Un stage, une alternance, un projet data ?</h2>
+        <p class="muted" style="margin-top:14px">Je suis disponible pour en parler. Je réponds rapidement.</p>
+      </div>
+      <ul class="links">
+        <li><span class="k">E-mail</span><span class="todo">hayettemdsk@gmail.com</span></li>
+        <li><span class="k">LinkedIn</span><span class="todo"><a href="https://www.linkedin.com/in/hayettemdsk" target="_blank">Lien vers LinkedIn</a></span></li>
+        <li><span class="k">GitHub</span><span class="todo"><a href="https://github.com/MHayette" target="_blank">Lien vers GitHub</a></span></li>
+        <!-- <li><span class="k">CV</span><span class="todo">lien vers ton CV (PDF)</span></li> -->
+      </ul>
+    </div>
+  </section>
+</div>
+</main>
+
+<!-- ================= PROJET : RÉGRESSION ================= -->
+<main id="v-regression" class="view" hidden>
+<div class="wrap">
+  <a class="back" href="#accueil" data-scroll="projets">← Tous les projets</a>
+  <div class="phead"><div><p class="eyebrow">Statistiques · Aix-Marseille Université</p><h1>Régression linéaire et prévisions</h1>
+    <p>Mesurer la relation entre deux variables, puis s'en servir pour prévoir. Deux jeux de données de TD, traités à la main puis vérifiés sous Excel.</p></div></div>
+  <div class="tabs" role="tablist" data-proj="regression">
+    <button role="tab" aria-selected="true" data-tab="apercu">Aperçu</button>
+    <button role="tab" aria-selected="false" data-tab="resultats">Résultats</button>
+    <button role="tab" aria-selected="false" data-tab="analyse">Analyse et conclusions</button>
+    <button role="tab" aria-selected="false" data-tab="code">Code</button>
+  </div>
+  <div class="panel" data-panel="apercu">
+    <div class="grid2">
+      <div class="box"><h3>Question</h3><p>Est-ce qu'une variable en explique une autre, et peut-on prévoir la suite ? Je l'ai appliqué à deux cas d'entreprise :</p>
+        <ul><li><b>Publicité et ventes</b> : 8 mois de dépenses publicitaires et de ventes d'une boutique.</li><li><b>Chiffre d'affaires de la société Baudrum</b> : ventes annuelles 2001–2004 et ventes par trimestre.</li></ul></div>
+      <div class="box soft"><h3>Méthode</h3><ul>
+        <li>Moyennes, écarts à la moyenne X<sub>i</sub>, Y<sub>i</sub></li>
+        <li>Droite des moindres carrés : a = ΣX<sub>i</sub>Y<sub>i</sub> / ΣX<sub>i</sub>², b = ȳ − a·x̄</li>
+        <li>Coefficient de corrélation r et R²</li>
+        <li>Prévisions, puis répartition annuelle par trimestre</li>
+        <li>Vérification avec PENTE, ORDONNEE.ORIGINE, COEFFICIENT.CORRELATION</li></ul></div>
+    </div>
+  </div>
+  <div class="panel" data-panel="resultats" hidden>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Jeu de données">
+        <button aria-pressed="true" data-ds="pub">Publicité / ventes</button>
+        <button aria-pressed="false" data-ds="ca">CA Baudrum</button>
+      </div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="l">Pente a</div><div class="v" id="r-a">–</div></div>
+      <div class="kpi"><div class="l">Ordonnée b</div><div class="v" id="r-b">–</div></div>
+      <div class="kpi"><div class="l">Corrélation r</div><div class="v" id="r-r">–</div></div>
+      <div class="kpi"><div class="l">R²</div><div class="v" id="r-r2">–</div></div>
+    </div>
+    <div class="grid2">
+      <div class="box"><h3 id="r-ctitle">Nuage de points et droite</h3><div class="chartbox"><canvas id="c-reg" aria-label="Nuage de points avec droite de régression"></canvas></div></div>
+      <div class="box soft">
+        <h3>Faire une prévision</h3>
+        <label class="f" for="r-slider"><span id="r-slabel">Dépense publicitaire</span>
+          <input type="range" id="r-slider"></label>
+        <p class="out" id="r-out"></p>
+        <p class="note" id="r-warn"></p>
+        <div id="r-quarter" hidden>
+          <h3 style="margin-top:18px">Répartition 2006 par trimestre</h3>
+          <div class="chartbox" style="height:220px"><canvas id="c-q" aria-label="Prévision 2006 par trimestre"></canvas></div>
+        </div>
+      </div>
+    </div>
+    <div class="box" style="margin-top:24px"><h3>Tableau de calcul</h3><div class="tblwrap"><table id="r-table"></table></div></div>
+  </div>
+  <div class="panel" data-panel="analyse" hidden>
+    <ol class="concl">
+      <li><div><h4>Publicité et ventes : relation très forte</h4><p class="muted">r ≈ 0,998. Chaque 1 k€ de publicité supplémentaire s'accompagne d'environ 3,10 k€ de ventes en plus. Pour 15 k€ de publicité, on prévoit environ 60,8 k€ de ventes.</p></div></li>
+      <li><div><h4>CA Baudrum : tendance nette à la hausse</h4><p class="muted">y = 9 400x + 67 000, r ≈ 0,93 (R² ≈ 0,86). Les ventes progressent en moyenne de 9 400 € par an, malgré le creux de 2002. Prévisions : 114 000 € en 2005 et 123 400 € en 2006.</p></div></li>
+      <li><div><h4>Une forte saisonnalité</h4><p class="muted">Le 3<sup>e</sup> trimestre pèse environ 36 % des ventes annuelles, le 4<sup>e</sup> seulement 16 %. La prévision de 2006 doit donc être répartie selon ce poids, pas en quatre parts égales.</p></div></li>
+      <li><div><h4>Les limites</h4><p class="muted">Une corrélation ne prouve pas la causalité. Avec 4 ou 8 points, la prévision reste fragile, et elle l'est encore plus quand on sort de la plage observée (par exemple 15 k€ de publicité alors que le maximum observé est 12 k€).</p></div></li>
+    </ol>
+  </div>
+  <div class="panel" data-panel="code" hidden>
+    <div class="codehead"><span>Excel : vérification des calculs</span><button class="copy" data-copy="code-reg-xl">Copier</button></div>
+<pre id="code-reg-xl">' Publicité en A2:A9, ventes en B2:B9
+=MOYENNE(A2:A9)                        ' x̄ = 7
+=MOYENNE(B2:B9)                        ' ȳ = 36
+=PENTE(B2:B9;A2:A9)                    ' a = 3,10
+=ORDONNEE.ORIGINE(B2:B9;A2:A9)         ' b = 14,32
+=COEFFICIENT.CORRELATION(A2:A9;B2:B9)  ' r = 0,998
+=PREVISION(15;B2:B9;A2:A9)             ' 60,78 k€ pour 15 k€ de pub
+
+' Colonnes du tableau de calcul (ligne 2)
+C2 =A2-$A$11       ' Xi = xi - x̄
+D2 =B2-$B$11       ' Yi = yi - ȳ
+E2 =C2*D2          ' XiYi
+F2 =C2^2           ' Xi²
+G2 =D2^2           ' Yi²</pre>
+    <div class="codehead"><span>Python : le même calcul</span><button class="copy" data-copy="code-reg-py">Copier</button></div>
+<pre id="code-reg-py">import numpy as np
+
+pub    = np.array([2, 3, 5, 6, 8, 9, 11, 12])        # k€
+ventes = np.array([20, 24, 30, 33, 40, 41, 48, 52])  # k€
+
+X = pub - pub.mean()
+Y = ventes - ventes.mean()
+
+a = (X * Y).sum() / (X ** 2).sum()
+b = ventes.mean() - a * pub.mean()
+r = (X * Y).sum() / np.sqrt((X ** 2).sum() * (Y ** 2).sum())
+
+print(f"y = {a:.3f}x + {b:.3f}   r = {r:.3f}")
+print(f"Prévision pour 15 k€ : {a * 15 + b:.2f} k€")
+
+# CA Baudrum : années numérotées 1 à 4
+x  = np.array([1, 2, 3, 4])
+ca = np.array([81000, 79000, 95000, 107000])
+a2, b2 = np.polyfit(x, ca, 1)          # 9400, 67000
+print("2005 :", a2 * 5 + b2, " 2006 :", a2 * 6 + b2)
+
+# Répartition de 2006 selon le poids de chaque trimestre
+trimestres = np.array([68000, 106000, 130000, 58000])  # totaux 2001-2004
+print((a2 * 6 + b2) * trimestres / trimestres.sum())</pre>
+  </div>
+</div>
+</main>
+
+<!-- ================= PROJET : MICRO-ENTREPRISE ================= -->
+<main id="v-micro" class="view" hidden>
+<div class="wrap">
+  <a class="back" href="#accueil" data-scroll="projets">← Tous les projets</a>
+  <div class="phead"><div><p class="eyebrow">Outil Excel · Produit numérique</p><h1>Suivi micro-entreprise 2026</h1>
+    <p>Un classeur pour qu'un micro-entrepreneur sache à tout moment ce qu'il a encaissé, ce qu'il doit à l'URSSAF et à quelle distance il est de son plafond.</p></div></div>
+  <div class="tabs" role="tablist" data-proj="micro">
+    <button role="tab" aria-selected="true" data-tab="apercu">Aperçu</button>
+    <button role="tab" aria-selected="false" data-tab="resultats">Simulateur</button>
+    <button role="tab" aria-selected="false" data-tab="analyse">Analyse et conclusions</button>
+    <button role="tab" aria-selected="false" data-tab="code">Code</button>
+  </div>
+  <div class="panel" data-panel="apercu">
+    <div class="grid2">
+      <div class="box"><h3>Le besoin</h3><p>Les micro-entrepreneurs paient leurs cotisations en pourcentage du chiffre d'affaires encaissé et doivent rester sous un plafond annuel. Beaucoup suivent ça « de tête », et découvrent trop tard qu'ils approchent du seuil.</p></div>
+      <div class="box soft"><h3>Les 5 onglets du classeur</h3><ul>
+        <li><b>Mode d'emploi</b> : comment remplir le fichier</li>
+        <li><b>Paramètres</b> : type d'activité, année, table des taux</li>
+        <li><b>Recettes</b> : journal des encaissements</li>
+        <li><b>Dépenses</b> : journal des achats</li>
+        <li><b>Tableau de bord</b> : cotisations par mois et par trimestre, revenu net, alertes et graphique</li></ul></div>
+    </div>
+  </div>
+  <div class="panel" data-panel="resultats" hidden>
+    <p class="flag">Les montants mensuels ci-dessous sont des <b>exemples</b>. Modifiez-les pour voir le tableau de bord se recalculer, comme dans le classeur.</p>
+    <div class="controls">
+      <label class="f" for="m-act">Type d'activité
+        <select id="m-act">
+          <option value="vente">Vente de marchandises</option>
+          <option value="bic" selected>Prestations de services (BIC)</option>
+          <option value="bnc">Profession libérale (BNC)</option>
+        </select></label>
+      <label class="f" for="m-rate">Taux de cotisations (%)<input type="number" id="m-rate" step="0.1" min="0" max="50"></label>
+      <label class="f" for="m-cap">Plafond annuel (€)<input type="number" id="m-cap" step="100" min="0"></label>
+    </div>
+    <div class="months" id="m-months"></div>
+    <div class="kpis" style="margin-top:22px">
+      <div class="kpi"><div class="l">CA encaissé</div><div class="v" id="m-ca">–</div></div>
+      <div class="kpi"><div class="l">Cotisations dues</div><div class="v" id="m-cot">–</div></div>
+      <div class="kpi"><div class="l">Revenu après cotisations</div><div class="v" id="m-net">–</div></div>
+      <div class="kpi"><div class="l">Plafond utilisé</div><div class="v" id="m-pct">–</div><span id="m-status" class="pill ok">OK</span></div>
+    </div>
+    <div class="grid2">
+      <div class="box"><h3>CA et cotisations par mois</h3><div class="chartbox"><canvas id="c-micro" aria-label="CA et cotisations par mois"></canvas></div></div>
+      <div class="box soft"><h3>Déclarations trimestrielles</h3><div class="tblwrap"><table id="m-q"></table></div>
+        <p class="note">Taux et plafonds 2026 indicatifs (services : plafond de 83 600 €, vente : 203 100 €). Vérifiez votre taux exact sur urssaf.fr.</p></div>
+    </div>
+  </div>
+  <div class="panel" data-panel="analyse" hidden>
+    <ol class="concl">
+      <li><div><h4>Les paramètres sont séparés des calculs</h4><p class="muted">Quand l'URSSAF change un taux ou un plafond, on modifie une seule cellule dans l'onglet Paramètres, et tout le classeur suit.</p></div></li>
+      <li><div><h4>Une alerte avant le problème</h4><p class="muted">Le statut passe en « Attention » à 80 % du plafond, puis en « Dépassé ». L'utilisateur a le temps de s'organiser au lieu de le découvrir en fin d'année.</p></div></li>
+      <li><div><h4>Mensuel ou trimestriel</h4><p class="muted">Le tableau de bord calcule les deux, parce que le micro-entrepreneur choisit sa fréquence de déclaration.</p></div></li>
+      <li><div><h4>Pistes d'amélioration</h4><p class="muted">Gérer une activité mixte (vente + services avec deux taux), proratiser le plafond pour une création en cours d'année, ajouter le versement libératoire de l'impôt.</p></div></li>
+    </ol>
+  </div>
+  <div class="panel" data-panel="code" hidden>
+    <div class="codehead"><span>Excel : formules clés du tableau de bord</span><button class="copy" data-copy="code-mi-xl">Copier</button></div>
+<pre id="code-mi-xl">' Taux selon l'activité choisie (onglet Paramètres)
+=RECHERCHEV(Activite;Parametres!$A$10:$C$12;2;FAUX)
+
+' CA encaissé du mois (mois en A2 du tableau de bord)
+=SOMME.SI.ENS(Recettes!$C:$C;Recettes!$A:$A;"&gt;="&amp;A2;Recettes!$A:$A;"&lt;="&amp;FIN.MOIS(A2;0))
+
+' Cotisations du mois
+=B2*Taux
+
+' Cumul annuel et part du plafond
+=SOMME($B$2:B2)
+=C2/Plafond
+
+' Statut affiché
+=SI(D2&gt;=1;"Dépassé";SI(D2&gt;=0,8;"Attention";"OK"))</pre>
+    <div class="codehead"><span>JavaScript : le calcul du simulateur de cette page</span><button class="copy" data-copy="code-mi-js">Copier</button></div>
+<pre id="code-mi-js">function tableauDeBord(mois, taux, plafond) {
+  const ca = mois.reduce((s, m) =&gt; s + m, 0);
+  const cotisations = ca * taux / 100;
+  const part = ca / plafond;
+  const statut = part &gt;= 1 ? "Dépassé" : part &gt;= 0.8 ? "Attention" : "OK";
+  const trimestres = [0, 1, 2, 3].map(t =&gt;
+    mois.slice(t * 3, t * 3 + 3).reduce((s, m) =&gt; s + m, 0));
+  return { ca, cotisations, net: ca - cotisations, part, statut, trimestres };
+}</pre>
+  </div>
+</div>
+</main>
+
+<!-- ================= PROJET : RESIL.IO ================= -->
+<main id="v-resilio" class="view" hidden>
+<div class="wrap">
+  <a class="back" href="#accueil" data-scroll="projets">← Tous les projets</a>
+  <div class="phead"><div><p class="eyebrow">Stage · RESIL.IO Health · Aix-Marseille Université · 2025–2026</p><h1>Suivi des traitements et qualité de vie</h1>
+    <p>RESIL.IO est une application qui accompagne les femmes sous hormonothérapie après un cancer du sein hormonodépendant. J'ai analysé ses données pour décrire le suivi des traitements, la qualité de vie des utilisatrices, et le lien entre les deux.</p></div></div>
+  <div class="tabs" role="tablist" data-proj="resilio">
+    <button role="tab" aria-selected="true" data-tab="apercu">Aperçu</button>
+    <button role="tab" aria-selected="false" data-tab="resultats">Résultats</button>
+    <button role="tab" aria-selected="false" data-tab="analyse">Analyse et conclusions</button>
+    <button role="tab" aria-selected="false" data-tab="code">Code</button>
+  </div>
+
+  <div class="panel" data-panel="apercu">
+    <div class="kpis">
+      <div class="kpi"><div class="l">Utilisatrices analysées</div><div class="v">30</div></div>
+      <div class="kpi"><div class="l">Prises enregistrées</div><div class="v">675</div></div>
+      <div class="kpi"><div class="l">Valeurs de qualité de vie</div><div class="v">2 244</div></div>
+      <div class="kpi"><div class="l">Indicateurs (0 à 10)</div><div class="v">6</div></div>
+    </div>
+    <div class="grid2">
+      <div class="box"><h3>Problématique</h3>
+        <p style="margin:0">Comment les données de RESIL.IO permettent-elles de caractériser le suivi thérapeutique des utilisatrices et leur qualité de vie, et quelles analyses mettre en œuvre pour étudier la relation entre les deux ?</p>
+        <h3 style="margin-top:18px">Données</h3>
+        <ul>
+          <li><b>treatment</b> : 112 traitements renseignés</li>
+          <li><b>treatment_intake_log</b> : 675 prises (taken / skipped)</li>
+          <li><b>daily_report</b> : 495 rapports quotidiens</li>
+          <li><b>indicator_value</b> et <b>indicator</b> : scores des 6 indicateurs</li>
+        </ul></div>
+      <div class="box soft"><h3>Démarche</h3>
+        <ol style="margin:0;padding-left:20px">
+          <li>Explorer les tables et leurs identifiants</li>
+          <li>Croiser les sources (jointures) et construire la population</li>
+          <li>Décrire le suivi : nombre de prises, statuts, durée</li>
+          <li>Décrire la qualité de vie, standardiser les 6 indicateurs</li>
+          <li>Étudier les corrélations (Pearson et Spearman, seuil 5 %)</li>
+        </ol>
+        <h3 style="margin-top:18px">Outils</h3>
+        <ul class="chips"><li>Excel</li><li>Power Query</li><li>RStudio</li><li>dplyr</li><li>tidyr</li><li>ggplot2</li><li>readxl</li></ul></div>
+    </div>
+  </div>
+
+  <div class="panel" data-panel="resultats" hidden>
+    <div class="grid2">
+      <div class="box"><h3>1. Construction de la population</h3>
+        <p class="muted" style="margin-top:0">On garde seulement les utilisatrices qui ont toutes les données nécessaires.</p>
+        <div class="chartbox" style="height:220px"><canvas id="c-funnel" aria-label="Entonnoir de la population : 72, 34, 30"></canvas></div></div>
+      <div class="box"><h3>2. Statut des 675 prises</h3>
+        <p class="muted" style="margin-top:0">Uniquement les prises enregistrées dans l'application.</p>
+        <div class="chartbox" style="height:220px"><canvas id="c-status" aria-label="632 prises taken, 43 skipped"></canvas></div></div>
+    </div>
+
+    <div class="box" style="margin-top:24px">
+      <div class="controls" style="justify-content:space-between">
+        <h3 style="margin:0">3. Profils de suivi des 30 utilisatrices</h3>
+        <div class="seg" role="group" aria-label="Variable">
+          <button aria-pressed="true" data-suivi="prises">Nombre de prises</button>
+          <button aria-pressed="false" data-suivi="duree">Durée du suivi</button>
+        </div>
+      </div>
+      <div class="chartbox" style="height:260px"><canvas id="c-suivi" aria-label="Répartition des utilisatrices"></canvas></div>
+      <p class="note" id="suivi-note"></p>
+    </div>
+
+    <div class="box" style="margin-top:24px">
+      <div class="controls" style="justify-content:space-between">
+        <h3 style="margin:0">4. Les six indicateurs de qualité de vie</h3>
+        <div class="seg" role="group" aria-label="Échelle">
+          <button aria-pressed="false" data-qdv="brut">Scores bruts</button>
+          <button aria-pressed="true" data-qdv="std">Scores standardisés</button>
+        </div>
+      </div>
+      <div class="chartbox" style="height:280px"><canvas id="c-qdv" aria-label="Scores moyens des six indicateurs"></canvas></div>
+      <p class="note" id="qdv-note"></p>
+      <div class="tblwrap" style="margin-top:12px"><table>
+        <thead><tr><th>Indicateur (brut)</th><th>Moyenne</th><th>Médiane</th><th>Min</th><th>Max</th><th>Écart-type</th></tr></thead>
+        <tbody>
+          <tr><td>Fatigue</td><td>4,30</td><td>4,34</td><td>0,33</td><td>7,00</td><td>1,91</td></tr>
+          <tr><td>Bouffées de chaleur</td><td>2,98</td><td>3,06</td><td>0,00</td><td>8,71</td><td>2,22</td></tr>
+          <tr><td>Douleurs articulaires</td><td>3,55</td><td>3,42</td><td>0,00</td><td>8,00</td><td>2,47</td></tr>
+          <tr><td>Qualité du sommeil</td><td>5,51</td><td>5,03</td><td>2,00</td><td>10,00</td><td>2,37</td></tr>
+          <tr><td>Humeur générale</td><td>7,30</td><td>7,47</td><td>3,50</td><td>10,00</td><td>1,70</td></tr>
+          <tr><td>Brouillard mental</td><td>7,22</td><td>7,86</td><td>2,50</td><td>10,00</td><td>1,95</td></tr>
+        </tbody></table></div>
+    </div>
+
+    <div class="box" style="margin-top:24px">
+      <div class="controls" style="justify-content:space-between">
+        <h3 style="margin:0">5. Suivi et qualité de vie : corrélations</h3>
+        <div class="seg" role="group" aria-label="Variable de suivi">
+          <button aria-pressed="false" data-corr="prises">Nombre de prises (Pearson)</button>
+          <button aria-pressed="true" data-corr="duree">Durée du suivi (Spearman)</button>
+        </div>
+      </div>
+      <div class="chartbox" style="height:280px"><canvas id="c-corr" aria-label="Coefficients de corrélation par indicateur"></canvas></div>
+      <p class="note">En vert : association significative (p &lt; 0,05). En gris : non significative. Corrélations calculées sur les scores bruts.</p>
+      <div class="tblwrap"><table id="corr-table"></table></div>
+    </div>
+  </div>
+
+  <div class="panel" data-panel="analyse" hidden>
+    <ol class="concl">
+      <li><div><h4>Construire la population avant d'analyser</h4><p class="muted">Sur 72 utilisatrices avec un traitement, 34 ont enregistré au moins une prise, et 30 ont aussi des données quotidiennes. Les résultats décrivent ces 30 utilisatrices, pas l'ensemble des utilisatrices de l'application.</p></div></li>
+      <li><div><h4>Des profils de suivi très hétérogènes</h4><p class="muted">De 1 à 247 prises et de 0 à 184 jours de suivi. 16 utilisatrices sur 30 ont 5 prises ou moins, et 13 ont un suivi de 5 jours ou moins. Les prises et la durée sont fortement liées (Pearson r = 0,920, p &lt; 0,001).</p></div></li>
+      <li><div><h4>Sommeil et fatigue : les dimensions les moins favorables</h4><p class="muted">Après standardisation, l'humeur (7,30) et le brouillard mental (7,22) ont les meilleurs scores ; la fatigue (5,70) et la qualité du sommeil (5,51) les plus faibles.</p></div></li>
+      <li><div><h4>Pas de lien avec le nombre de prises</h4><p class="muted">Aucune corrélation significative entre le nombre de prises et les six indicateurs (toutes les p-valeurs &gt; 0,5), ni avec le score moyen (r = 0,019, R² ≈ 0,0004).</p></div></li>
+      <li><div><h4>Deux associations avec la durée du suivi</h4><p class="muted">Plus le suivi est long, plus la fatigue tend à être faible (ρ = −0,400, p = 0,029) et le sommeil meilleur (ρ = 0,414, p = 0,023). Le brouillard mental suit la même tendance sans être significatif (p = 0,078).</p></div></li>
+      <li><div><h4>Association n'est pas causalité</h4><p class="muted">Avec 30 utilisatrices et des données d'observation, ces résultats sont exploratoires. On ne peut pas dire que suivre plus longtemps réduit la fatigue. Une prise non enregistrée n'est pas non plus une prise oubliée.</p></div></li>
+      <li><div><h4>Recommandations pour RESIL.IO</h4><p class="muted">Élargir la population, améliorer la régularité des saisies, passer à une analyse longitudinale individuelle et créer des indicateurs de qualité du renseignement des données.</p></div></li>
+    </ol>
+  </div>
+
+  <div class="panel" data-panel="code" hidden>
+    <p class="flag">Code reconstitué à partir de la démarche décrite dans le rapport (Power Query puis R).</p>
+    <div class="codehead"><span>Power Query (M) : rattacher chaque prise à son utilisatrice</span><button class="copy" data-copy="code-res-m">Copier</button></div>
+<pre id="code-res-m">let
+    Prises     = treatment_intake_log,
+    Jointure   = Table.NestedJoin(Prises, {"treatment_id"}, treatment, {"id"},
+                                  "Traitement", JoinKind.Inner),
+    AvecOwner  = Table.ExpandTableColumn(Jointure, "Traitement", {"owner_id"}),
+    // 675 prises -> 34 utilisatrices distinctes
+    ParUtilisatrice = Table.Group(AvecOwner, {"owner_id"}, {
+        {"nb_prises",     each Table.RowCount(_), Int64.Type},
+        {"premiere_prise", each List.Min([date]), type date},
+        {"derniere_prise", each List.Max([date]), type date}
+    }),
+    Duree = Table.AddColumn(ParUtilisatrice, "duree_jours",
+              each Duration.Days([derniere_prise] - [premiere_prise]), Int64.Type)
+in
+    Duree</pre>
+    <div class="codehead"><span>R : standardisation et corrélations</span><button class="copy" data-copy="code-res-r">Copier</button></div>
+<pre id="code-res-r">library(readxl); library(dplyr); library(tidyr); library(ggplot2)
+
+suivi  &lt;- read_excel("suivi_30.xlsx")        # owner_id, nb_prises, duree_jours
+scores &lt;- read_excel("indicateurs_30.xlsx")  # owner_id, date, indicateur, valeur
+
+# Moyenne de chaque indicateur par utilisatrice
+moy &lt;- scores %&gt;%
+  group_by(owner_id, indicateur) %&gt;%
+  summarise(score = mean(valeur, na.rm = TRUE), .groups = "drop")
+
+# Standardisation : 10 = situation la plus favorable
+negatifs &lt;- c("Fatigue", "Bouffées de chaleur", "Douleurs articulaires")
+moy &lt;- moy %&gt;% mutate(score_std = ifelse(indicateur %in% negatifs, 10 - score, score))
+
+# Corrélations durée du suivi / chaque indicateur (Spearman)
+base &lt;- moy %&gt;% select(owner_id, indicateur, score) %&gt;%
+  pivot_wider(names_from = indicateur, values_from = score) %&gt;%
+  left_join(suivi, by = "owner_id")
+
+sapply(c(negatifs, "Qualité du sommeil", "Humeur générale", "Brouillard mental"),
+       function(i) {
+         t &lt;- cor.test(base$duree_jours, base[[i]], method = "spearman", exact = FALSE)
+         c(rho = unname(t$estimate), p = t$p.value)
+       })
+
+# Scores moyens standardisés
+moy %&gt;% group_by(indicateur) %&gt;% summarise(m = mean(score_std)) %&gt;%
+  ggplot(aes(reorder(indicateur, m), m)) + geom_col(fill = "#0b7a5a") +
+  coord_flip() + labs(x = NULL, y = "Score moyen standardisé (0-10)")</pre>
+  </div>
+</div>
+</main>
+
+<!-- ================= PROJET : A69 ================= -->
+<main id="v-a69" class="view" hidden>
+<div class="wrap">
+  <a class="back" href="#accueil" data-scroll="projets">← Tous les projets</a>
+  <div class="phead"><div><p class="eyebrow">Master DASI · Université de Toulon · Projet de groupe</p><h1>Le conflit de l'autoroute A69</h1>
+    <p>Qui sont les acteurs du conflit autour de l'autoroute Castres–Toulouse, quel pouvoir ont-ils, et comment les rapports de force ont-ils changé ? Territoire étudié : le sud du Tarn et l'est toulousain.</p></div></div>
+  <div class="tabs" role="tablist" data-proj="a69">
+    <button role="tab" aria-selected="true" data-tab="apercu">Aperçu</button>
+    <button role="tab" aria-selected="false" data-tab="resultats">Matrice interactive</button>
+    <button role="tab" aria-selected="false" data-tab="analyse">Analyse et conclusions</button>
+    <button role="tab" aria-selected="false" data-tab="code">Code</button>
+  </div>
+  <div class="panel" data-panel="apercu">
+    <div class="grid2">
+      <div class="box"><h3>Le livrable</h3><ul>
+        <li>Dossier écrit en six parties, bibliographie de 17 sources aux normes APA</li>
+        <li>Présentation de 38 diapositives, alignée point par point sur le dossier</li>
+        <li>Travail à six</li></ul></div>
+      <div class="box soft"><h3>La matrice CAPE</h3><p style="margin:0">Elle classe les acteurs selon deux critères : sont-ils <b>internes ou externes</b> au territoire, et ont-ils un <b>pouvoir de régulation</b> ? On obtient quatre cases : Collectif, Arbitre, Privatif, Extérieur.</p></div>
+    </div>
+  </div>
+  <div class="panel" data-panel="resultats" hidden>
+    <div class="controls">
+      <span class="muted" style="font-weight:600;font-size:15px">Phase du conflit :</span>
+      <div class="seg" role="group" aria-label="Phase">
+        <button aria-pressed="true" data-phase="0">1990–2022</button>
+        <button aria-pressed="false" data-phase="1">2023–2024</button>
+        <button aria-pressed="false" data-phase="2">2025–2026</button>
+      </div>
+    </div>
+    <p class="out" id="phase-txt" style="margin-top:0"></p>
+    <div class="grid2">
+      <div class="cape">
+        <div></div><div class="ax">Interne au territoire</div><div class="ax">Externe au territoire</div>
+        <div class="ax">Régule</div>
+        <button class="cell" data-cell="C" aria-pressed="true"><div class="L">C</div><div class="n">Collectif</div><div class="w">Élus, communes, collectifs locaux</div></button>
+        <button class="cell" data-cell="A" aria-pressed="false"><div class="L">A</div><div class="n">Arbitre</div><div class="w">État, Région, préfectures, juges</div></button>
+        <div class="ax">Ne régule pas</div>
+        <button class="cell" data-cell="P" aria-pressed="false"><div class="L">P</div><div class="n">Privatif</div><div class="w">Propriétaires, agriculteurs, riverains</div></button>
+        <button class="cell" data-cell="E" aria-pressed="false"><div class="L">E</div><div class="n">Extérieur</div><div class="w">ATOSCA, BTP, mouvements nationaux, médias</div></button>
+      </div>
+      <div class="box soft" id="cape-detail" aria-live="polite"></div>
+    </div>
+    <p class="note">Les cases surlignées sont celles qui dominent pendant la phase choisie.</p>
+    <div class="box" style="margin-top:24px"><h3>Qui détient quel pouvoir ?</h3>
+      <div class="tblwrap"><table class="power">
+        <thead><tr><th>Type de pouvoir</th><th>État, élus, ATOSCA</th><th>Juges</th><th>Opposants</th></tr></thead>
+        <tbody>
+          <tr><td>Politique et financier</td><td><span class="dot" aria-label="oui"></span></td><td></td><td></td></tr>
+          <tr><td>Juridique</td><td></td><td><span class="dot" aria-label="oui"></span></td><td><span class="dot" aria-label="oui"></span></td></tr>
+          <tr><td>Médiatique et scientifique</td><td></td><td></td><td><span class="dot" aria-label="oui"></span></td></tr>
+          <tr><td>Mobilisation</td><td></td><td></td><td><span class="dot" aria-label="oui"></span></td></tr>
+        </tbody></table></div>
+      <p class="note">Les opposants n'ont pas de pouvoir de décision. Ils compensent par l'opinion publique et le droit (recours).</p></div>
+  </div>
+  <div class="panel" data-panel="analyse" hidden>
+    <ol class="concl">
+      <li><div><h4>L'État n'est pas un arbitre neutre</h4><p class="muted">Il est placé en case Arbitre, mais il porte lui-même le projet. Les seuls arbitres indépendants sont les juges.</p></div></li>
+      <li><div><h4>Chaque case contient des partisans et des opposants</h4><p class="muted">Les élus, les agriculteurs ou les riverains sont divisés. Le conflit ne se résume pas à deux camps opposés case par case.</p></div></li>
+      <li><div><h4>Le conflit change d'échelle</h4><p class="muted">Avec le chantier en 2023–2024, les acteurs extérieurs (mouvements nationaux, médias, jusqu'à un rapporteur de l'ONU) font passer le conflit du niveau local au débat national.</p></div></li>
+      <li><div><h4>Deux coalitions</h4><p class="muted">D'un côté l'État, les élus locaux, ATOSCA, des acteurs économiques comme Pierre Fabre et une partie des habitants. De l'autre La Voie est libre, les associations environnementales, les Soulèvements de la Terre, le GNSA, des agriculteurs, des riverains et des scientifiques.</p></div></li>
+    </ol>
+  </div>
+  <div class="panel" data-panel="code" hidden>
+    <div class="codehead"><span>JavaScript : données et logique de la matrice interactive</span><button class="copy" data-copy="code-a69">Copier</button></div>
+<pre id="code-a69">const CAPE = {
+  C: { nom: "Collectif", interne: true,  regule: true,
+       acteurs: ["Maires et élus locaux", "Communes", "La Voie est libre"] },
+  A: { nom: "Arbitre",   interne: false, regule: true,
+       acteurs: ["État", "Région Occitanie", "Préfectures", "Tribunaux"] },
+  P: { nom: "Privatif",  interne: true,  regule: false,
+       acteurs: ["Propriétaires", "Agriculteurs", "Riverains", "Entreprises locales"] },
+  E: { nom: "Extérieur", interne: false, regule: false,
+       acteurs: ["ATOSCA", "Entreprises du BTP", "Mouvements nationaux", "Médias"] }
+};
+
+// Cases dominantes à chaque phase du conflit
+const PHASES = [
+  { periode: "1990–2022", dominent: ["A", "C"] },
+  { periode: "2023–2024", dominent: ["E"] },
+  { periode: "2025–2026", dominent: ["A"] }
+];
+
+function afficherPhase(i) {
+  document.querySelectorAll(".cell").forEach(cell =&gt;
+    cell.classList.toggle("dom", PHASES[i].dominent.includes(cell.dataset.cell)));
+}</pre>
+  </div>
+</div>
+</main>
+
+<!-- ================= PROJET : MOBILE MONEY ================= -->
+<main id="v-momo" class="view" hidden>
+<div class="wrap">
+  <a class="back" href="#accueil" data-scroll="projets">← Tous les projets</a>
+  <div class="phead"><div><p class="eyebrow">Développement · SaaS · En conception</p><h1>Traçabilité mobile money</h1>
+    <p>Retrouver en quelques secondes une opération faite il y a 10 jours, même quand le SMS a été supprimé, et permettre aux détenteurs de cabines de suivre leurs transactions en temps réel.</p></div></div>
+  <div class="tabs" role="tablist" data-proj="momo">
+    <button role="tab" aria-selected="true" data-tab="apercu">Aperçu</button>
+    <button role="tab" aria-selected="false" data-tab="resultats">Prototype</button>
+    <button role="tab" aria-selected="false" data-tab="analyse">Analyse et conclusions</button>
+    <button role="tab" aria-selected="false" data-tab="code">Code</button>
+  </div>
+  <div class="panel" data-panel="apercu">
+    <div class="grid2">
+      <div class="box"><h3>Le problème sur le terrain</h3>
+        <p style="margin-top:0">Un client revient à la cabine et dit : « J'ai fait une opération il y a 10 jours ». Pour la retrouver, l'agent n'a que deux sources :</p>
+        <ul>
+          <li><b>Les SMS de confirmation</b>, souvent déjà supprimés pour libérer la mémoire du téléphone</li>
+          <li><b>Le cahier</b> où les opérations sont notées à la main, au jour le jour</li>
+        </ul>
+        <p style="margin-bottom:0">Résultat : l'agent perd du temps à feuilleter le cahier, ne trouve parfois rien, et le client repart sans réponse. Le détenteur de la cabine, lui, ne voit pas ce qui se passe en temps réel.</p></div>
+      <div class="box soft"><h3>La solution</h3>
+        <ul>
+          <li><b>Chaque opération est enregistrée</b> au moment où elle est faite, avec une référence, la date et l'heure</li>
+          <li><b>Recherche instantanée</b> par les derniers chiffres du numéro du client</li>
+          <li><b>Fonctionne sur un téléphone à touches</b>, par un menu à code court (USSD)</li>
+          <li><b>Tableau de bord pour le détenteur de cabine</b> : opérations de chaque agent, totaux du jour, en temps réel</li>
+        </ul>
+        <h3 style="margin-top:18px">Pour qui ?</h3>
+        <ul class="chips"><li>Agents de cabine</li><li>Détenteurs de cabines</li><li>Clients</li></ul></div>
+    </div>
+    <div class="box" style="margin-top:24px"><h3>Avant / après</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Situation</th><th style="text-align:left">Aujourd'hui (cahier + SMS)</th><th style="text-align:left">Avec l'outil</th></tr></thead>
+        <tbody>
+          <tr><td>Retrouver une opération de 10 jours</td><td style="text-align:left;white-space:normal">Feuilleter le cahier, chercher dans les SMS</td><td style="text-align:left;white-space:normal">Taper 4 chiffres, résultat immédiat</td></tr>
+          <tr><td>SMS supprimé</td><td style="text-align:left;white-space:normal">Preuve perdue</td><td style="text-align:left;white-space:normal">Opération toujours enregistrée</td></tr>
+          <tr><td>Suivi par le détenteur</td><td style="text-align:left;white-space:normal">En fin de journée, sur le cahier</td><td style="text-align:left;white-space:normal">En temps réel, par agent</td></tr>
+        </tbody></table></div></div>
+  </div>
+  <div class="panel" data-panel="resultats" hidden>
+    <p class="flag">Démonstration avec des opérations d'exemple sur les 14 derniers jours. Essayez : composez <b>*123#</b>, OK, puis <b>2</b> (Rechercher) et tapez <b>4471</b>. Ou cherchez un client directement dans le tableau du détenteur.</p>
+    <div class="proto">
+      <div>
+        <p class="sub" style="margin-bottom:8px">Téléphone de l'agent A</p>
+        <div class="phone">
+          <div class="screen" id="p-screen" aria-live="polite"></div>
+          <div class="typed" id="p-typed" aria-label="Saisie"></div>
+          <div class="keys" id="p-keys"></div>
+        </div>
+      </div>
+      <div>
+        <p class="sub" style="margin-bottom:8px">Tableau du détenteur de cabine</p>
+        <div class="kpis" style="grid-template-columns:repeat(3,1fr)">
+          <div class="kpi"><div class="l">Opérations aujourd'hui</div><div class="v" id="p-n">0</div></div>
+          <div class="kpi"><div class="l">Dépôts du jour (F)</div><div class="v" id="p-dep">0</div></div>
+          <div class="kpi"><div class="l">Retraits du jour (F)</div><div class="v" id="p-ret">0</div></div>
+        </div>
+        <div class="box">
+          <div class="controls">
+            <label class="f" for="p-search">Rechercher un client (derniers chiffres)<input type="text" id="p-search" inputmode="numeric" placeholder="ex. 4471" style="font:inherit;font-size:15px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)"></label>
+            <label class="f" for="p-agent">Agent<select id="p-agent"><option value="">Tous</option><option>Agent A</option><option>Agent B</option></select></label>
+            <span class="muted" id="p-found" style="font-size:14px"></span>
+          </div>
+          <div class="tblwrap" style="max-height:340px;overflow-y:auto"><table id="p-table"></table></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel" data-panel="analyse" hidden>
+    <ol class="concl">
+      <li><div><h4>Le vrai coût, c'est le temps de recherche</h4><p class="muted">Chaque réclamation oblige l'agent à fouiller le cahier pendant que d'autres clients attendent. Une recherche par numéro règle ce problème.</p></div></li>
+      <li><div><h4>Ne pas dépendre des SMS</h4><p class="muted">Les SMS restent sur le téléphone et disparaissent quand on les supprime. Un enregistrement centralisé garde une trace durable de chaque opération.</p></div></li>
+      <li><div><h4>Partir de l'outil de l'agent</h4><p class="muted">Les agents ont des téléphones à touches : le service doit marcher avec des menus numérotés, sans application à installer.</p></div></li>
+      <li><div><h4>Une valeur pour le détenteur de cabine</h4><p class="muted">Il suit en temps réel les opérations de chaque agent, compare avec sa caisse et repère vite un écart.</p></div></li>
+      <li><div><h4>Prochaines étapes</h4><p class="muted">Interroger des agents et des détenteurs pour valider le besoin, étudier l'accès à une passerelle USSD auprès d'un opérateur, sécuriser les données des clients, puis tester avec quelques cabines.</p></div></li>
+    </ol>
+  </div>
+  <div class="panel" data-panel="code" hidden>
+    <div class="codehead"><span>JavaScript : recherche d'une opération</span><button class="copy" data-copy="code-momo-s">Copier</button></div>
+<pre id="code-momo-s">// Retrouver toutes les opérations d'un client à partir des derniers chiffres
+function rechercher(operations, chiffres, agent) {
+  return operations
+    .filter(op =&gt; op.client.endsWith(chiffres))
+    .filter(op =&gt; !agent || op.agent === agent)
+    .sort((a, b) =&gt; b.date - a.date);   // la plus récente en premier
+}
+
+// Totaux du jour pour le détenteur de cabine
+function totauxDuJour(operations) {
+  const auj = new Date().toDateString();
+  const jour = operations.filter(op =&gt; op.date.toDateString() === auj);
+  const somme = type =&gt; jour.filter(op =&gt; op.type === type)
+                            .reduce((s, op) =&gt; s + op.montant, 0);
+  return { nombre: jour.length, depots: somme("Dépôt"), retraits: somme("Retrait") };
+}</pre>
+    <div class="codehead"><span>JavaScript : le menu USSD du téléphone (machine à états)</span><button class="copy" data-copy="code-momo">Copier</button></div>
+<pre id="code-momo">function ok(saisie) {
+  switch (etat) {
+    case "accueil":
+      if (saisie === "*123#") aller("menu");
+      break;
+    case "menu":           // 1 Nouvelle op · 2 Rechercher · 3 Historique · 4 Total
+      if (saisie === "1") aller("type");
+      if (saisie === "2") aller("recherche");
+      if (saisie === "3") afficherHistorique();
+      if (saisie === "4") afficherTotal();
+      break;
+    case "recherche":
+      afficher(rechercher(operations, saisie).slice(0, 3));
+      break;
+    case "type":    op.type = saisie === "1" ? "Dépôt" : "Retrait"; aller("montant"); break;
+    case "montant": op.montant = Number(saisie); aller("client"); break;
+    case "client":  op.client = saisie; aller("valider"); break;
+    case "valider":
+      if (saisie === "1") enregistrer({ ...op, ref: nouvelleRef(), date: new Date(), agent: "Agent A" });
+      aller("menu");
+  }
+}</pre>
+  </div>
+</div>
+</main>
+
+<footer><div class="wrap">© 2026 Hayette Medessoukou</div></footer>
+
+<script>
+(function(){
+  const $ = (s, el=document) => el.querySelector(s);
+  const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const fmt = (v, d=0) => v.toLocaleString("fr-FR", {minimumFractionDigits:d, maximumFractionDigits:d});
+  const hasChart = typeof Chart !== "undefined";
+  const charts = {};
+  function chartDefaults(){
+    if(!hasChart) return;
+    Chart.defaults.color = css("--muted");
+    Chart.defaults.borderColor = css("--line");
+    Chart.defaults.font.family = css("--body");
+  }
+
+  /* ---------- Routage ---------- */
+  const views = ["regression","micro","resilio","a69","momo"];
+  const inits = {};
+  const done = {};
+  function route(){
+    const h = location.hash.replace("#","");
+    const id = views.includes(h) ? h : "accueil";
+    $$(".view").forEach(v => v.hidden = v.id !== "v-"+id);
+    if(id !== "accueil"){ window.scrollTo(0,0); }
+    else if(pendingScroll){ const t = document.getElementById(pendingScroll); pendingScroll = null; if(t) t.scrollIntoView(); }
+  }
+  let pendingScroll = null;
+  $$("[data-scroll]").forEach(a => a.addEventListener("click", e => {
+    const target = a.dataset.scroll;
+    if(location.hash === "#accueil" || location.hash === ""){
+      e.preventDefault();
+      const t = document.getElementById(target); if(t) t.scrollIntoView();
+    } else { pendingScroll = target; }
+  }));
+  window.addEventListener("hashchange", route);
+
+  /* ---------- Onglets ---------- */
+  $$(".tabs").forEach(tabs => {
+    const proj = tabs.dataset.proj;
+    const view = document.getElementById("v-"+proj);
+    $$("button", tabs).forEach(btn => btn.addEventListener("click", () => {
+      $$("button", tabs).forEach(b => b.setAttribute("aria-selected", b === btn));
+      $$(".panel", view).forEach(p => p.hidden = p.dataset.panel !== btn.dataset.tab);
+      const key = proj+":"+btn.dataset.tab;
+      if(inits[key] && !done[key]){ done[key] = true; inits[key](); }
+    }));
+  });
+
+  /* ---------- Copier le code ---------- */
+  $$(".copy").forEach(b => b.addEventListener("click", async () => {
+    const txt = document.getElementById(b.dataset.copy).textContent;
+    try { await navigator.clipboard.writeText(txt); b.textContent = "Copié"; }
+    catch(e){ b.textContent = "Sélectionnez le texte"; }
+    setTimeout(() => b.textContent = "Copier", 1800);
+  }));
+
+  /* ---------- Régression ---------- */
+  const DS = {
+    pub: { x:[2,3,5,6,8,9,11,12], y:[20,24,30,33,40,41,48,52], xl:"Publicité (k€)", yl:"Ventes (k€)",
+           labels:null, dec:2, min:0, max:20, step:0.5, def:15, title:"Ventes selon la publicité",
+           slabel:"Dépense publicitaire (k€)", maxObs:12 },
+    ca:  { x:[1,2,3,4], y:[81000,79000,95000,107000], xl:"Année", yl:"Ventes (€)",
+           labels:["2001","2002","2003","2004"], dec:0, min:5, max:8, step:1, def:6, title:"Ventes annuelles et prévision",
+           slabel:"Année à prévoir", maxObs:4, quarters:[68000,106000,130000,58000] }
+  };
+  function reg(x,y){
+    const n=x.length, mx=x.reduce((a,b)=>a+b)/n, my=y.reduce((a,b)=>a+b)/n;
+    let sxy=0,sxx=0,syy=0; const rows=[];
+    for(let i=0;i<n;i++){ const X=x[i]-mx, Y=y[i]-my; sxy+=X*Y; sxx+=X*X; syy+=Y*Y; rows.push([x[i],y[i],X,Y,X*Y,X*X,Y*Y]); }
+    const a=sxy/sxx, b=my-a*mx, r=sxy/Math.sqrt(sxx*syy);
+    return {n,mx,my,sxy,sxx,syy,a,b,r,rows};
+  }
+  let cur = "pub";
+  function drawReg(){
+    const d = DS[cur], m = reg(d.x,d.y);
+    $("#r-a").textContent = fmt(m.a, d.dec===0?0:3);
+    $("#r-b").textContent = fmt(m.b, d.dec===0?0:3);
+    $("#r-r").textContent = fmt(m.r,3);
+    $("#r-r2").textContent = fmt(m.r*m.r,2);
+    $("#r-ctitle").textContent = d.title;
+    const s = $("#r-slider"); s.min=d.min; s.max=d.max; s.step=d.step; s.value=d.def;
+    $("#r-slabel").textContent = d.slabel;
+    $("#r-quarter").hidden = !d.quarters;
+    // table
+    const yr = i => d.labels ? d.labels[i] : (i+1);
+    const f = v => fmt(v, d.dec===0?0:2);
+    let h = "<thead><tr><th>"+(d.labels?"Année":"Mois")+"</th><th>xᵢ</th><th>yᵢ</th><th>Xᵢ</th><th>Yᵢ</th><th>XᵢYᵢ</th><th>Xᵢ²</th><th>Yᵢ²</th></tr></thead><tbody>";
+    m.rows.forEach((r,i) => { h += "<tr><td>"+yr(i)+"</td>"+r.map(f).map(v=>"<td>"+v+"</td>").join("")+"</tr>"; });
+    h += "</tbody><tfoot><tr><td>Total</td><td>"+f(d.x.reduce((a,b)=>a+b))+"</td><td>"+f(d.y.reduce((a,b)=>a+b))+"</td><td>0</td><td>0</td><td>"+f(m.sxy)+"</td><td>"+f(m.sxx)+"</td><td>"+f(m.syy)+"</td></tr></tfoot>";
+    $("#r-table").innerHTML = h;
+    updateForecast();
+  }
+  function updateForecast(){
+    const d = DS[cur], m = reg(d.x,d.y), v = Number($("#r-slider").value), p = m.a*v+m.b;
+    if(cur==="pub"){
+      $("#r-out").innerHTML = "Pour <b>"+fmt(v,1)+" k€</b> de publicité : <b>"+fmt(p,2)+" k€</b> de ventes prévues";
+      $("#r-warn").textContent = v>d.maxObs ? "Attention : au-delà de 12 k€, on extrapole hors des données observées." : "";
+    } else {
+      $("#r-out").innerHTML = "Prévision "+(2000+v)+" : <b>"+fmt(p,0)+" €</b>";
+      $("#r-warn").textContent = v>6 ? "Plus on s'éloigne de 2004, moins la prévision est fiable." : "";
+      if(hasChart) drawQuarter(p, 2000+v);
+    }
+    if(!hasChart) return;
+    const acc = css("--accent"), gold = css("--gold");
+    const xs = d.x.concat([v]); const lo = Math.min(...xs, d.min), hi = Math.max(...xs);
+    const data = {datasets:[
+      {type:"scatter", label:"Données observées", data:d.x.map((x,i)=>({x,y:d.y[i]})), backgroundColor:acc, pointRadius:6},
+      {type:"line", label:"Droite de régression", data:[{x:lo,y:m.a*lo+m.b},{x:hi,y:m.a*hi+m.b}], borderColor:acc, borderWidth:2, pointRadius:0, borderDash:[]},
+      {type:"scatter", label:"Prévision", data:[{x:v,y:p}], backgroundColor:gold, pointRadius:8, pointStyle:"rectRot"}
+    ]};
+    const opts = {responsive:true, maintainAspectRatio:false, animation:false,
+      plugins:{legend:{position:"bottom"}, tooltip:{callbacks:{label:c=>c.dataset.label+" : "+fmt(c.parsed.y, d.dec===0?0:2)}}},
+      scales:{x:{type:"linear", min:cur==="pub"?0:0.5, title:{display:true,text:d.xl},
+                 ticks:{stepSize:1, callback:val=> cur==="ca" ? (Number.isInteger(val)? String(2000+val):"") : val}},
+              y:{title:{display:true,text:d.yl}, ticks:{callback:val=>fmt(val)}}}};
+    if(charts.reg){ charts.reg.data = data; charts.reg.options = opts; charts.reg.update(); }
+    else charts.reg = new Chart($("#c-reg"), {data, options:opts});
+  }
+  function drawQuarter(total, year){
+    const q = DS.ca.quarters, sum = q.reduce((a,b)=>a+b), vals = q.map(v=>total*v/sum);
+    const data = {labels:["T1","T2","T3","T4"], datasets:[{label:"Prévision "+year, data:vals, backgroundColor:css("--accent"), borderRadius:4}]};
+    const opts = {responsive:true, maintainAspectRatio:false, animation:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>fmt(c.parsed.y)+" € ("+fmt(q[c.dataIndex]/sum*100,1)+" %)"}}},
+      scales:{y:{ticks:{callback:v=>fmt(v)}}}};
+    if(charts.q){ charts.q.data=data; charts.q.update(); } else charts.q = new Chart($("#c-q"), {type:"bar", data, options:opts});
+  }
+  $$("[data-ds]").forEach(b => b.addEventListener("click", () => {
+    cur = b.dataset.ds; $$("[data-ds]").forEach(x => x.setAttribute("aria-pressed", x===b)); drawReg();
+  }));
+  $("#r-slider").addEventListener("input", updateForecast);
+  inits["regression:resultats"] = () => { chartDefaults(); drawReg(); };
+
+  /* ---------- Micro-entreprise ---------- */
+  const ACT = { vente:{rate:12.3, cap:203100}, bic:{rate:21.2, cap:83600}, bnc:{rate:25.6, cap:83600} };
+  const MOIS = ["Janv.","Févr.","Mars","Avr.","Mai","Juin","Juil.","Août","Sept.","Oct.","Nov.","Déc."];
+  const EX = [1200,1500,900,2100,1800,2500,3000,1400,2200,2600,2800,3100];
+  const mBox = $("#m-months");
+  MOIS.forEach((m,i) => {
+    mBox.insertAdjacentHTML("beforeend", '<label class="f" for="mm'+i+'">'+m+'<input type="number" id="mm'+i+'" min="0" step="50" value="'+EX[i]+'"></label>');
+  });
+  function setAct(){ const a = ACT[$("#m-act").value]; $("#m-rate").value = a.rate; $("#m-cap").value = a.cap; calcMicro(); }
+  function calcMicro(){
+    const mois = MOIS.map((_,i)=> Math.max(0, Number($("#mm"+i).value)||0));
+    const taux = Number($("#m-rate").value)||0, cap = Number($("#m-cap").value)||1;
+    const ca = mois.reduce((a,b)=>a+b,0), cot = ca*taux/100, part = ca/cap;
+    $("#m-ca").textContent = fmt(ca)+" €";
+    $("#m-cot").textContent = fmt(cot)+" €";
+    $("#m-net").textContent = fmt(ca-cot)+" €";
+    $("#m-pct").textContent = fmt(part*100,1)+" %";
+    const st = $("#m-status");
+    st.className = "pill " + (part>=1?"bad":part>=.8?"warn":"ok");
+    st.textContent = part>=1?"Dépassé":part>=.8?"Attention":"OK";
+    let t = "<thead><tr><th>Trimestre</th><th>CA</th><th>Cotisations</th></tr></thead><tbody>";
+    for(let q=0;q<4;q++){ const s = mois.slice(q*3,q*3+3).reduce((a,b)=>a+b,0); t += "<tr><td>T"+(q+1)+"</td><td>"+fmt(s)+" €</td><td>"+fmt(s*taux/100)+" €</td></tr>"; }
+    t += "</tbody><tfoot><tr><td>Année</td><td>"+fmt(ca)+" €</td><td>"+fmt(cot)+" €</td></tr></tfoot>";
+    $("#m-q").innerHTML = t;
+    if(!hasChart) return;
+    const data = {labels:MOIS, datasets:[
+      {label:"CA encaissé", data:mois, backgroundColor:css("--accent"), borderRadius:3},
+      {label:"Cotisations", data:mois.map(v=>v*taux/100), backgroundColor:css("--gold"), borderRadius:3}]};
+    if(charts.micro){ charts.micro.data = data; charts.micro.update(); }
+    else charts.micro = new Chart($("#c-micro"), {type:"bar", data, options:{responsive:true, maintainAspectRatio:false, animation:false,
+      plugins:{legend:{position:"bottom"}, tooltip:{callbacks:{label:c=>c.dataset.label+" : "+fmt(c.parsed.y)+" €"}}},
+      scales:{y:{ticks:{callback:v=>fmt(v)+" €"}}}}});
+  }
+  $("#m-act").addEventListener("change", setAct);
+  ["#m-rate","#m-cap"].forEach(s => $(s).addEventListener("input", calcMicro));
+  mBox.addEventListener("input", calcMicro);
+  inits["micro:resultats"] = () => { chartDefaults(); setAct(); };
+
+  /* ---------- RESIL.IO ---------- */
+  const IND = ["Fatigue","Bouffées de chaleur","Douleurs articulaires","Qualité du sommeil","Humeur générale","Brouillard mental"];
+  const QDV = { brut:[4.30,2.98,3.55,5.51,7.30,7.22], std:[5.70,7.02,6.45,5.51,7.30,7.22] };
+  const CORR = {
+    prises:{ m:"Pearson r", r:[-0.103,-0.018,0.065,0.033,-0.006,0.046], p:[0.588,0.924,0.732,0.861,0.977,0.811] },
+    duree: { m:"Spearman ρ", r:[-0.400,-0.030,-0.103,0.414,0.160,0.326], p:[0.029,0.876,0.590,0.023,0.398,0.078] }
+  };
+  const SUIVI = {
+    prises:{ l:["1–5","6–10","11–20","21–30","31–60","61–150","151–250"], v:[16,2,5,4,1,1,1], x:"Nombre de prises enregistrées",
+             n:"16 utilisatrices sur 30 (53,3 %) ont entre 1 et 5 prises. Le maximum atteint 247 prises." },
+    duree: { l:["0–5 j","6–10 j","11–20 j","21–30 j","31–60 j","121–250 j"], v:[13,4,2,6,3,2], x:"Durée du suivi (première à dernière prise)",
+             n:"13 utilisatrices sur 30 (43,3 %) ont un suivi de 5 jours ou moins ; deux dépassent 120 jours (maximum 184)." }
+  };
+  const barOpts = (horizontal, extra={}) => Object.assign({responsive:true, maintainAspectRatio:false, animation:false,
+    indexAxis: horizontal ? "y" : "x", plugins:{legend:{display:false}}}, extra);
+  function resSuivi(k){
+    $$("[data-suivi]").forEach(b => b.setAttribute("aria-pressed", b.dataset.suivi===k));
+    const s = SUIVI[k]; $("#suivi-note").textContent = s.n;
+    if(!hasChart) return;
+    const data = {labels:s.l, datasets:[{data:s.v, backgroundColor:css("--accent"), borderRadius:4}]};
+    const opts = barOpts(false, {scales:{x:{title:{display:true,text:s.x}}, y:{title:{display:true,text:"Utilisatrices"}, ticks:{stepSize:2}}}});
+    if(charts.suivi){ charts.suivi.data = data; charts.suivi.options = opts; charts.suivi.update(); }
+    else charts.suivi = new Chart($("#c-suivi"), {type:"bar", data, options:opts});
+  }
+  function resQdv(k){
+    $$("[data-qdv]").forEach(b => b.setAttribute("aria-pressed", b.dataset.qdv===k));
+    $("#qdv-note").textContent = k==="std"
+      ? "Échelle standardisée : 10 = situation la plus favorable pour les six indicateurs (fatigue, bouffées et douleurs inversées : 10 − score)."
+      : "Échelle brute : pour la fatigue, les bouffées de chaleur et les douleurs, un score élevé est défavorable. Les moyennes ne sont donc pas comparables entre elles.";
+    if(!hasChart) return;
+    const order = IND.map((n,i)=>({n, v:QDV[k][i]})); if(k==="std") order.sort((a,b)=>b.v-a.v);
+    const data = {labels:order.map(o=>o.n), datasets:[{data:order.map(o=>o.v), backgroundColor:css(k==="std"?"--accent":"--gold"), borderRadius:4}]};
+    const opts = barOpts(true, {scales:{x:{min:0, max:10, title:{display:true,text:"Score moyen (0 à 10)"}}},
+      plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>fmt(c.parsed.x,2)}}}});
+    if(charts.qdv){ charts.qdv.data = data; charts.qdv.options = opts; charts.qdv.update(); }
+    else charts.qdv = new Chart($("#c-qdv"), {type:"bar", data, options:opts});
+  }
+  function resCorr(k){
+    $$("[data-corr]").forEach(b => b.setAttribute("aria-pressed", b.dataset.corr===k));
+    const c = CORR[k];
+    let t = "<thead><tr><th>Indicateur</th><th>"+c.m+"</th><th>p-valeur</th><th>Significatif ?</th></tr></thead><tbody>";
+    IND.forEach((n,i) => { t += "<tr><td>"+n+"</td><td>"+fmt(c.r[i],3)+"</td><td>"+fmt(c.p[i],3)+"</td><td>"+(c.p[i]<0.05?"<span class='pill ok'>Oui</span>":"Non")+"</td></tr>"; });
+    $("#corr-table").innerHTML = t + "</tbody>";
+    if(!hasChart) return;
+    const data = {labels:IND, datasets:[{data:c.r, backgroundColor:c.p.map(p => p<0.05 ? css("--accent") : css("--line")), borderRadius:4}]};
+    const opts = barOpts(true, {scales:{x:{min:-0.5, max:0.5, title:{display:true,text:c.m}}},
+      plugins:{legend:{display:false}, tooltip:{callbacks:{label:x=>c.m+" = "+fmt(x.parsed.x,3)+" · p = "+fmt(c.p[x.dataIndex],3)}}}});
+    if(charts.corr){ charts.corr.data = data; charts.corr.options = opts; charts.corr.update(); }
+    else charts.corr = new Chart($("#c-corr"), {type:"bar", data, options:opts});
+  }
+  $$("[data-suivi]").forEach(b => b.addEventListener("click", () => resSuivi(b.dataset.suivi)));
+  $$("[data-qdv]").forEach(b => b.addEventListener("click", () => resQdv(b.dataset.qdv)));
+  $$("[data-corr]").forEach(b => b.addEventListener("click", () => resCorr(b.dataset.corr)));
+  inits["resilio:resultats"] = () => {
+    chartDefaults();
+    if(hasChart){
+      new Chart($("#c-funnel"), {type:"bar", data:{labels:["Au moins un traitement","Au moins une prise","Prise + données quotidiennes"],
+        datasets:[{data:[72,34,30], backgroundColor:[css("--line"), css("--gold"), css("--accent")], borderRadius:4}]},
+        options:barOpts(true, {scales:{x:{min:0, max:80, title:{display:true,text:"Utilisatrices"}}}})});
+      new Chart($("#c-status"), {type:"doughnut", data:{labels:["Taken : 632 (93,6 %)","Skipped : 43 (6,4 %)"],
+        datasets:[{data:[632,43], backgroundColor:[css("--accent"), css("--gold")], borderColor:css("--bg"), borderWidth:2}]},
+        options:{responsive:true, maintainAspectRatio:false, animation:false, cutout:"62%", plugins:{legend:{position:"right"}}}});
+    }
+    resSuivi("prises"); resQdv("std"); resCorr("duree");
+  };
+
+  /* ---------- A69 CAPE ---------- */
+  const CAPE = {
+    C:{n:"Collectif", q:"Acteurs du territoire qui régulent", who:"Maires et élus locaux, communes et intercommunalités, collectifs et associations locales comme La Voie est libre.", role:"Ils représentent les habitants et participent aux décisions locales. Certains soutiennent l'autoroute, d'autres s'y opposent.", key:"La Voie est libre n'a pas de pouvoir de décision, mais défend une vision de l'intérêt collectif du territoire."},
+    A:{n:"Arbitre", q:"Acteurs extérieurs qui régulent", who:"Région Occitanie, État et ses services, préfectures, tribunaux administratifs.", role:"Ils encadrent le conflit et prennent les décisions.", key:"L'État n'est pas neutre puisqu'il soutient le projet. Seuls les juges arbitrent de façon indépendante."},
+    P:{n:"Privatif", q:"Acteurs du territoire qui défendent leurs intérêts", who:"Propriétaires fonciers, agriculteurs concernés, riverains, entreprises locales.", role:"Ils sont touchés directement : expropriations, nuisances, cadre de vie, conséquences économiques.", key:"Ils ne sont pas tous d'accord : certains soutiennent l'autoroute, d'autres la combattent."},
+    E:{n:"Extérieur", q:"Acteurs extérieurs sans pouvoir de régulation", who:"ATOSCA, entreprises de construction, associations et mouvements écologistes nationaux, personnalités, médias.", role:"Ils agissent sur le territoire sans en faire partie.", key:"ATOSCA construit et exploite l'autoroute, mais n'a aucun pouvoir pour réguler le territoire."}
+  };
+  const PHASES = [
+    {dom:["A","C"], t:"Phase institutionnelle : l'État et les élus dominent, le projet avance par les procédures."},
+    {dom:["E"], t:"Chantier et contestation : les acteurs extérieurs entrent en scène, le conflit devient national."},
+    {dom:["A"], t:"Bataille juridique : ce sont les arbitres, c'est-à-dire les juges, qui tranchent."}
+  ];
+  function cell(k){
+    $$(".cell").forEach(c => c.setAttribute("aria-pressed", c.dataset.cell===k));
+    const c = CAPE[k];
+    $("#cape-detail").innerHTML = "<p class='eyebrow' style='margin:0'>"+c.q+"</p><h3 style='margin:4px 0 12px'>"+k+" · "+c.n+"</h3>"+
+      "<h4>Qui ?</h4><p style='margin:0 0 12px'>"+c.who+"</p><h4>Leur rôle</h4><p style='margin:0 0 12px'>"+c.role+"</p><h4>À retenir</h4><p style='margin:0'>"+c.key+"</p>";
+  }
+  function phase(i){
+    $$("[data-phase]").forEach(b => b.setAttribute("aria-pressed", Number(b.dataset.phase)===i));
+    $$(".cell").forEach(c => c.classList.toggle("dom", PHASES[i].dom.includes(c.dataset.cell)));
+    $("#phase-txt").textContent = PHASES[i].t;
+  }
+  $$(".cell").forEach(c => c.addEventListener("click", () => cell(c.dataset.cell)));
+  $$("[data-phase]").forEach(b => b.addEventListener("click", () => phase(Number(b.dataset.phase))));
+  cell("C"); phase(0);
+
+  /* ---------- Mobile money ---------- */
+  const SEED = [
+    [13,"11:11","Agent A","Dépôt",60000,"62908812"],
+    [12,"08:30","Agent B","Retrait",10000,"96124471"],
+    [10,"09:14","Agent A","Dépôt",25000,"96124471"],
+    [10,"11:02","Agent B","Retrait",15000,"97553820"],
+    [9,"16:40","Agent A","Retrait",5000,"61227309"],
+    [7,"14:22","Agent A","Dépôt",7500,"66019045"],
+    [6,"09:50","Agent B","Dépôt",30000,"97553820"],
+    [5,"17:05","Agent A","Retrait",20000,"90334512"],
+    [4,"12:18","Agent A","Dépôt",12000,"61227309"],
+    [3,"15:30","Agent B","Retrait",40000,"94776631"],
+    [2,"10:45","Agent A","Dépôt",5000,"66019045"],
+    [1,"18:10","Agent B","Dépôt",100000,"90334512"],
+    [0,"08:55","Agent A","Retrait",8000,"94776631"],
+    [0,"09:40","Agent B","Dépôt",15000,"97553820"]
+  ];
+  let refN = 1;
+  const newRef = () => "OP"+String(refN++).padStart(4,"0");
+  const ops = SEED.map(s => { const d = new Date(); d.setDate(d.getDate()-s[0]); const [h,m] = s[1].split(":"); d.setHours(+h, +m, 0, 0);
+    return {date:d, agent:s[2], type:s[3], m:s[4], c:s[5], ref:newRef()}; });
+  const dfmt = d => d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit"});
+  const hfmt = d => d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+  const search = (digits, agent) => ops.filter(o => o.c.endsWith(digits) && (!agent || o.agent===agent)).sort((a,b)=>b.date-a.date);
+  function today(){ const t = new Date().toDateString(); return ops.filter(o => o.date.toDateString()===t); }
+  function render(){
+    const j = today();
+    $("#p-n").textContent = j.length;
+    $("#p-dep").textContent = fmt(j.filter(o=>o.type==="Dépôt").reduce((s,o)=>s+o.m,0));
+    $("#p-ret").textContent = fmt(j.filter(o=>o.type==="Retrait").reduce((s,o)=>s+o.m,0));
+    const q = $("#p-search").value.replace(/\D/g,""), ag = $("#p-agent").value;
+    const list = search(q, ag);
+    $("#p-found").textContent = q ? list.length+" opération(s) trouvée(s) pour …"+q : list.length+" opérations";
+    let h = "<thead><tr><th>Date</th><th>Heure</th><th>Agent</th><th>Réf.</th><th>Type</th><th>Montant</th><th>Client</th></tr></thead><tbody>";
+    if(!list.length) h += "<tr><td colspan='7' style='text-align:left' class='muted'>Aucune opération trouvée.</td></tr>";
+    list.forEach(o => { h += "<tr><td>"+dfmt(o.date)+"</td><td>"+hfmt(o.date)+"</td><td>"+o.agent+"</td><td>"+o.ref+"</td><td>"+o.type+"</td><td>"+fmt(o.m)+" F</td><td>…"+o.c.slice(-4)+"</td></tr>"; });
+    $("#p-table").innerHTML = h + "</tbody>";
+  }
+  $("#p-search").addEventListener("input", render);
+  $("#p-agent").addEventListener("change", render);
+
+  let etat = "accueil", buf = "", op = {};
+  const T = {
+    accueil:"Composez *123#\npuis appuyez sur OK",
+    menu:"CABINE · Agent A\n1. Nouvelle opération\n2. Rechercher client\n3. Historique\n4. Total du jour",
+    recherche:"Derniers chiffres\ndu numéro client :",
+    type:"Type d'opération\n1. Dépôt\n2. Retrait",
+    montant:"Montant (FCFA) :",
+    client:"Numéro du client\n(au moins 4 chiffres) :"
+  };
+  const line = o => dfmt(o.date)+" "+(o.type==="Dépôt"?"DEP":"RET")+" "+fmt(o.m)+"F\n  "+o.ref+" "+hfmt(o.date);
+  function go(e, extra){ etat = e; buf = ""; $("#p-typed").textContent = ""; $("#p-screen").textContent = extra || T[e] || ""; }
+  function ok(){
+    const s = buf;
+    switch(etat){
+      case "accueil": if(s==="*123#") go("menu"); else go("accueil","Code inconnu.\nComposez *123#"); break;
+      case "menu":
+        if(s==="1") go("type");
+        else if(s==="2") go("recherche");
+        else if(s==="3"){ const l = ops.filter(o=>o.agent==="Agent A").sort((a,b)=>b.date-a.date).slice(0,3).map(line).join("\n"); go("retour","HISTORIQUE\n"+(l||"Aucune opération")+"\nOK : menu"); }
+        else if(s==="4"){ const j = today().filter(o=>o.agent==="Agent A");
+          const sum = t => fmt(j.filter(o=>o.type===t).reduce((a,o)=>a+o.m,0));
+          go("retour","TOTAL DU JOUR\nOpérations : "+j.length+"\nDépôts : "+sum("Dépôt")+" F\nRetraits : "+sum("Retrait")+" F\nOK : menu"); }
+        else go("menu"); break;
+      case "recherche":
+        if(!/^\d{2,}$/.test(s)){ go("recherche","Tapez au moins\n2 chiffres :"); break; }
+        { const r = search(s); go("retour", r.length ? "CLIENT …"+s+" ("+r.length+")\n"+r.slice(0,3).map(line).join("\n")+"\nOK : menu" : "Aucune opération\npour …"+s+"\nOK : menu"); }
+        break;
+      case "retour": go("menu"); break;
+      case "type": if(s==="1"||s==="2"){ op = {type: s==="1"?"Dépôt":"Retrait"}; go("montant"); } else go("type"); break;
+      case "montant": if(Number(s)>0){ op.m = Number(s); go("client"); } else go("montant","Montant invalide.\nMontant (FCFA) :"); break;
+      case "client": if(/^\d{4,}$/.test(s)){ op.c = s; go("valider", "Confirmer ?\n"+op.type+" "+fmt(op.m)+" F\nClient …"+s.slice(-4)+"\n1. Valider  2. Annuler"); } else go("client","4 chiffres minimum :"); break;
+      case "valider":
+        if(s==="1"){ op.date = new Date(); op.agent = "Agent A"; op.ref = newRef(); ops.push(op); render(); go("retour","Opération enregistrée\nRéf. "+op.ref+"\nVisible par le détenteur\nOK : menu"); }
+        else go("menu"); break;
+    }
+  }
+  const kb = $("#p-keys");
+  ["1","2","3","4","5","6","7","8","9","*","0","#"].forEach(k => kb.insertAdjacentHTML("beforeend", '<button type="button" data-k="'+k+'">'+k+'</button>'));
+  kb.insertAdjacentHTML("beforeend", '<button type="button" class="no" data-k="del" aria-label="Effacer">⌫</button><button type="button" data-k="end" aria-label="Raccrocher">✕</button><button type="button" class="ok" data-k="ok">OK</button>');
+  kb.addEventListener("click", e => {
+    const b = e.target.closest("button"); if(!b) return;
+    const k = b.dataset.k;
+    if(k==="ok") ok(); else if(k==="del") buf = buf.slice(0,-1); else if(k==="end") go("accueil"); else buf += k;
+    if(k!=="ok" && k!=="end") $("#p-typed").textContent = buf;
+  });
+  go("accueil"); render();
+
+  route();
+})();
+</script>
+</body>
+</html>
